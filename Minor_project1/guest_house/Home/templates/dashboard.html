@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BookMyHotel</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <style>
+            .center{
+                display: block;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            {% block style %}
+            {% endblock style %}
+        </style>
+        {% block script %}{% endblock script %}
+    </head>
+
+    <body>
+    {% block content %}
+        <div class="row" style="padding-left: 2%;padding-top:1%;">
+            <div class="col-md-10">
+                <h2>BookMyStay</h2>
+            </div>
+            {% if name %}
+                <div class="col-md-2">
+                    <a href="{% url 'Home' %}" > Home</a> |
+                    <a href="{% url 'logout' %}" class="btn btn-primary" >Log out</a><br/><br/>
+                </div>
+            {% endif %}
+        </div>
+        <nav class="nav justify-content-center">
+            <a class="nav-link" href="{% url 'search' %}" >Book your room now</a><br/><br/>
+            <a class="nav-link" href="{% url 'booking_history'%}" >Order History</a> <br/><br/>
+            <a class="nav-link" href="{% url 'profile' %}" >Profile</a><br/><br/>
+        </nav><br/><br/>
+        <div class="container">
+        {% if details %}
+            {% for detail in details %}
+                <div class="row">
+                    <div class="col-sm-11">
+                        <div class="card">
+                            <div class="card-block">
+                                <b class="card-title" style="font-size: x-large">Booking id:</b> <b>bmh-{{ detail.0.booking_id }}</b><br/><br/>
+                                <h6 class="card-subtitle mb-2 text-muted">Hotel: {{ detail.1 }}</h6>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                    <b><p class="card-text">Room type: {{ detail.0.room_id }}</p></b>
+                                    </div>
+                                    <div class="col-sm-2">
+                                    <b><p class="card-text">Rooms: {{ detail.0.total_rooms }}</p></b>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    <b><p class="card-text">Total price: Rs.{{ detail.0.total_cost }}</p></b>
+                                    </div>
+                                    {% if detail.0.discounted_price > 0 %}
+                                        <div class="col-sm-3">
+                                        <b><p class="card-text">Final price: Rs.{{ detail.0.discounted_price}}</p></b>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-sm-3">
+                                        <b><p class="card-text">Final price: Rs.{{ detail.0.total_cost}}</p></b>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <a href="#" class="card-link">Cancel booking</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+{% endblock content %}
+    </body>
+</html>
